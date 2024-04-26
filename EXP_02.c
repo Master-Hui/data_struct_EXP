@@ -170,7 +170,27 @@ void destoryTree(TreeNodePtr root) {
     }
     free(root);
 }
+void delTreeNode(TreeNodePtr root)
+{
+    if(root)
+    {
+        if(root->left!=NULL&&root->left->val==-1)
+            {
+                root->left=NULL;
+                destoryTree(root->left);
+            }
+        if(root->right!=NULL&&root->right->val==-1)
+            {
+                root->right=NULL;
+                destoryTree(root->right);
+            }
+        if(root->left!=NULL)
+            delTreeNode(root->left);
+        if(root->right!=NULL)
+            delTreeNode(root->right);
+    }
 
+}
 /** TODO:  任务一：请你通过队列来实现层次遍历构建二叉树，并返回二叉树的头结点 */
 TreeNodePtr createTreeWithLevelOrder(int *data, int size) {
    QueuePtr queue = InitQueue();
@@ -203,7 +223,15 @@ TreeNodePtr createTreeWithLevelOrder(int *data, int size) {
    {
        DeQueue(queue);
    }
-
+    if(root->val==-1)//返回空树
+    {
+     free(root);
+      root = NULL;
+    }
+    else
+    {
+        delTreeNode(root);
+    }
     return root;
 
 
@@ -218,8 +246,7 @@ TreeNodePtr createTreeWithLevelOrder(int *data, int size) {
 void preOrderTraverse(TreeNodePtr root) {
     if(root)
     {
-        if(root->val!=-1)
-            printf("%d",root->val);
+        printf("%d",root->val);
         preOrderTraverse(root->left);
         preOrderTraverse(root->right);
     }
@@ -234,8 +261,7 @@ void inOrderTraverse(TreeNodePtr root) {
  if(root)
  {
      inOrderTraverse(root->left);
-     if(root->val!=-1)
-        printf("%d",root->val);
+     printf("%d",root->val);
      inOrderTraverse(root->right);
  }
 }
@@ -250,8 +276,7 @@ if(root)
 {
     postOrderTraverse(root->left);
     postOrderTraverse(root->right);
-    if(root->val!=-1)
-        printf("%d",root->val);
+    printf("%d",root->val);
 
 }
 }
