@@ -286,7 +286,7 @@ if(root)
 int sumOfLeftLeaves(TreeNodePtr root) {
     if(root==NULL)
         return 0;
-    if(root->left!=NULL&&root->left->left ==NULL&&root->left->right!=NULL)
+    if(root->left!=NULL&&root->left->left ==NULL&&root->left->right==NULL)
     {
 
          return sumOfLeftLeaves(root->right)+root->left->val;
@@ -299,7 +299,23 @@ int sumOfLeftLeaves(TreeNodePtr root) {
 
 /** TODO: 任务三：请你通过递归求取该树的镜像，即翻转该二叉树 */
 TreeNodePtr invertTree(TreeNodePtr root) {
+    TreeNodePtr temp = NULL;
+    if(root)//若树为非空
+    {
+        temp = root->left;
+        root->left = root->right;
+        root->right = temp;
 
+    if(root->left)
+    {
+        invertTree(root->left);
+    }
+    if(root->right)
+    {
+        invertTree(root->right);
+    }
+    }
+    return root;
 }
 
 
@@ -388,6 +404,10 @@ int main() {
         }
 
     }
+
+    fclose(fp);
+
+}
 
     fclose(fp);
 
