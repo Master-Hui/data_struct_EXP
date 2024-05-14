@@ -181,46 +181,71 @@ double clusteringCoefficient(Graph g) {
  */
 int dijkstra(Graph g, int start, int end, int *path)
 {
-    int INF = 60000;
     int dis[max_dis]={0};//节点最短路径
     int prev[max_dis]={0};//前驱结点
-    int temp,i,j,k,min;
-
+    int tran_path[max_dis]={0};
+    int temp,i,j,k,min,pre;
+    int flag[max_dis]={0};
     for(i=0;i<g.N;i++)
     {
+        for(j=0;j<g.N;j++)
+        {
+            if(g.matrix[i][j]==0&&i!=j)
+                g.matrix[i][j]=max_dis;
+        }
+    }
+    for(i=0;i<g.N;i++)
+    {
+        flag[i]=0;
         prev[i]=start;
         dis[i]=g.matrix[start][i];//最短路径初始化
-        if(dis[i]==0&&i!=start)
-            dis[i]=INF;
     }
+    flag[start]=1;
     for(i=1;i<g.N;i++)
     {
         for(j=0;j<g.N;j++)
         {
-            if(dis[j]<INF)
+            if(dis[j]<max_dis&&flag[j]==0)
             {
                 min = dis[j];
                 k=j;
             }
         }
+        flag[k]=1;
         for(j=0;j<g.N;j++)
         {
-            temp = (g.matrix[k][j]==INF?INF:(min+g.matrix[k][j]));
+            temp = (g.matrix[k][j]==max_dis?max_dis:(min+g.matrix[k][j]));
             if(dis[j]>temp)
             {
                 dis[j]=temp;
                 prev[j]=k;
+
             }
         }
     }
     i=0;
     path[i++]=end;
+    pre = end;
     do
     {
-        path[i++]=prev[end];
-        end=prev[end];
-        printf("%d\n",path[i-1]);
-    }while(prev[end]!=start);
+        path[i++]=prev[pre];
+        pre=prev[pre];
+    }while(prev[pre]!=start);
+    i=0;
+    while(path[i]!=start)
+    {
+        tran_path[i]=path[i];
+        i++;
+    }
+    tran_path[i]=path[i];
+    j=0;
+    while(i>0)
+    {
+        path[j]=tran_path[i];
+        j++;
+        i--;
+    }
+    path[j]=tran_path[i];
     return dis[end];
 
 
