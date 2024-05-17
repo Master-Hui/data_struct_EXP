@@ -54,7 +54,7 @@ STUDENT* Change_by_Priority(STUDENT *student_data,int Priority[5],int i,int j)//
     }
     return student_data;
 }
-STUDENT* sort(STUDENT *student_data,int student_num,int Priority[5])
+void sort(STUDENT *student_data,int student_num,int Priority[5])
 {
     STUDENT temp;
     int i,j;
@@ -80,8 +80,49 @@ STUDENT* sort(STUDENT *student_data,int student_num,int Priority[5])
             }
         }
     }
-    return student_data;
 }
+void merge(unsigned long arr[], unsigned long temp[], int left, int mid, int right) {
+    int i = left;    // 左半部分的起始索引
+    int j = mid + 1; // 右半部分的起始索引
+    int k = left;    // 用于临时数组的起始索引
+
+    // 合并两个子数组到临时数组中
+    while (i <= mid && j <= right) {
+        if (arr[i] <= arr[j]) {
+            temp[k++] = arr[i++];
+        } else {
+            temp[k++] = arr[j++];
+        }
+    }
+
+    // 如果左边的子数组还有剩余的元素，直接复制到临时数组中
+    while (i <= mid) {
+        temp[k++] = arr[i++];
+    }
+
+    // 如果右边的子数组还有剩余的元素，直接复制到临时数组中
+    while (j <= right) {
+        temp[k++] = arr[j++];
+    }
+
+    // 将排序后的元素复制回原数组
+    for (i = left; i <= right; i++) {
+        arr[i] = temp[i];
+    }
+}
+void mergeSort(unsigned long arr[],unsigned long temp[], int left, int right) {
+    if (left < right) {
+        int mid = (left + right) / 2; // 找到中点
+
+        // 分别对左右半部分进行归并排序
+        mergeSort(arr, temp, left, mid);
+        mergeSort(arr, temp, mid + 1, right);
+
+        // 合并两个排序好的部分
+        merge(arr, temp, left, mid, right);
+    }
+}
+
 int main()
 {
     int student_num,i,j;
@@ -112,18 +153,41 @@ int main()
         student_data[i].aver_grade=get_Wei_Aver_Score(student_data[i].grades,weight);
 
     }
-    student_data = sort(student_data,student_num,Priority);
+     sort(student_data,student_num,Priority);
     int rank;
     for(i=0;i<student_num;i++)
     {
-        if(!(i>=1&&(student_data[i]==student_data[i-1])))
+        if(!(i>=1&&(student_data[i].aver_grade==student_data[i-1].aver_grade)))
             rank = i+1;
         printf("%d %d\n",rank,student_data[i].code);
     }
     /*********** TASK 1 **********/
-    int num;
-    
+
+
+    int num;//输入的正整数个数
+    unsigned long Inve_group[N]={0},temp[N]={0};//存储正整数序列
     /*********** TASK 2 **********/
-    
+    scanf("%d",&num);
+    for(i=0;i<num;i++)//储存序列
+    {
+        scanf("%lu", &Inve_group[i]);
+    }
+    mergeSort(Inve_group,temp,0,num);
+    unsigned long invr=0;
+    int loop;
+    for(i=0;i<num;i++)
+    {
+        loop=num-i-1;
+        for(j=i+1;j<num;j++)
+        {
+            if(Inve_group[i]==Inve_group[j])
+            {
+                loop--;
+            }
+            invr += loop;
+        }
+    }
+    printf("%lu",loop);
     return 0;
 }
+
