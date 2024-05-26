@@ -174,7 +174,7 @@ int main()
     }
     mergeSort(Inve_group,temp,0,num);
     unsigned long invr=0;
-    int loop;
+    unsigned long loop;
     for(i=0;i<num;i++)
     {
         loop=num-i-1;
